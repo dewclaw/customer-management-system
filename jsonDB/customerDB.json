@@ -1,4 +1,6 @@
 {
+    "numOfCustomers" : 4,
+
     "0" : {
         "name" : "cust 1",
         "phone1" : "1231231234"
@@ -10,5 +12,10 @@
     "2" : {
         "name" : "cust 3",
         "phone1" : "1231231234"
+    },
+    "3" : {
+        "name" : "Dewclaw",
+        "phone1" : "6316721260"
     }
 }
+{"name":"frank","phone1":"1231231"}

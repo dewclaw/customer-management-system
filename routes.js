@@ -37,12 +37,30 @@ function getNewCustomer(request,response){
 // POST request for /newcustomer, 
 function postNewCustomer(request,response,timeout){
     console.log("Information Posted")
+
     bodyBuilder.buildBody(request,timeout).then((body)=>{
         console.log(body);
+    
+    addNewCustomer(body)
+    
         response.writeHead(301,{Location: 'http://localhost:8000/showcustomers'});
         response.end();
     })
 }
+// Write to customerDB function
+function addNewCustomer(requestBody){
+    let newCustObj = {
+        "name" : requestBody.customerName,
+        "phone1" : requestBody.customerPhone
+    }
+    fs.appendFile('./jsonDB/customerDB.json', JSON.stringify(newCustObj), (error)=>{
+        if (error) throw error;
+        console.log(`file write success.`)
+    })
+}
+
+
+
 // GET request to any route not defined
 function getUndefined(request,response){
     response.writeHead(404, {'Content-Type' : 'text/html'})

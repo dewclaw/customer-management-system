@@ -22,6 +22,7 @@ let server = http.createServer((request,response)=>{
             if (request.method == 'GET') {
                 Routes.getNewCustomer(request,response)
             } else if (request.method == 'POST') {
+                // POST request function
                 Routes.postNewCustomer(request,response,10000)
             }
             break
