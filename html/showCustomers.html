@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Customer List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Customer List</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% Object.keys(customers).forEach(function(customer){ %>
+            <tr>
+                <td><%= customers[customer].name %></td>
+                <td><%= customers[customer].phone1 %></td>
+            </tr>
+            <% }); %>
+
+        </tbody>
+    </table>
+</body>
+</html>
