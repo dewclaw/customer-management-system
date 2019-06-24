@@ -1,5 +1,6 @@
 // Imports
 const mongoose = require('mongoose');
+const sConfig = require('../config.js');
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -16,7 +17,7 @@ var CustomerOne = new Customer({
     name : "Juliana",
     phoneNumberOne : "6316721260"
 });
-mongoose.connect('mongodb://ruser:rootpassword1@ds161069.mlab.com:61069/dataclaw', {useNewUrlParser : true}).then((
+mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.password}@ds161069.mlab.com:61069/dataclaw`, {useNewUrlParser : true}).then((
 ()=>{console.log("MONGODB CONNECTION SUCCESS"),
 (error)=>{ throw error}}
 ));
@@ -36,7 +37,7 @@ mongoose.connect('mongodb://ruser:rootpassword1@ds161069.mlab.com:61069/dataclaw
 // });
 
 // Finding all in a collection 
-Customer.find({}).exec((error,customers)=>{
-    if(error) throw error;
-    console.log(customers)
-})
+// Customer.find({}).exec((error,customers)=>{
+//     if(error) throw error;
+//     console.log(customers)
+// })

@@ -1,3 +1,6 @@
 let serverConfig = {port : 8000, location : 'localhost'}
-
-module.exports = serverConfig
+let mongoCreds = {username : 'ruser', password : 'rootpassword1'};
+module.exports = {
+    serverConfig : serverConfig,
+    mongoCreds : mongoCreds
+}
