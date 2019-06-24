@@ -3,6 +3,7 @@ let fs = require('fs');
 let ejs = require('ejs');
 let bodyBuilder = require('./library/bodyBuilder.js');
 
+
 // Preload HTML pages, this should already be done in a database
 let loadedPages = {
     index : fs.readFileSync(`./html/index.html`, 'utf8'),
@@ -25,6 +26,7 @@ function getCustomers(request,response){
     // console.log(loadedDB.customerData)
     // console.log(loadedPages.getCustomers)
     response.writeHead(200, {'Content-Type' : 'text/html'});
+    //                                                  LOAD IN CUSTOMERS FROM DATABASE HERE
     response.write(ejs.render(loadedPages.getCustomers, {customers : loadedDB.customerData}));
     response.end();
 }
@@ -39,9 +41,8 @@ function postNewCustomer(request,response,timeout){
     console.log("Information Posted")
 
     bodyBuilder.buildBody(request,timeout).then((body)=>{
-        console.log(body);
-    
-    addNewCustomer(body)
+        // Post to database
+        
     
         response.writeHead(301,{Location: 'http://localhost:8000/showcustomers'});
         response.end();
@@ -53,13 +54,12 @@ function addNewCustomer(requestBody){
         "name" : requestBody.customerName,
         "phone1" : requestBody.customerPhone
     }
-    fs.appendFile('./jsonDB/customerDB.json', JSON.stringify(newCustObj), (error)=>{
-        if (error) throw error;
-        console.log(`file write success.`)
-    })
+    // fs.appendFile('./jsonDB/customerDB.json', JSON.stringify(newCustObj), (error)=>{
+    //     if (error) throw error;
+    //     console.log(`file write success.`)
+    // })
+    console.log(newCustObj.name)
 }
-
-
 
 // GET request to any route not defined
 function getUndefined(request,response){
