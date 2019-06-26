@@ -3,7 +3,6 @@ let fs = require('fs');
 let ejs = require('ejs');
 let bodyBuilder = require('./library/bodyBuilder.js');
 
-
 // Preload HTML pages, this should already be done in a database
 let loadedPages = {
     index : fs.readFileSync(`./html/index.html`, 'utf8'),
@@ -22,12 +21,15 @@ function getIndex(request,response){
     response.end();
 }
 // GET request for /customers
-function getCustomers(request,response){
+function getCustomers(request,response,customerArray){
     // console.log(loadedDB.customerData)
     // console.log(loadedPages.getCustomers)
+
+    // console.log(customerArray);
+
     response.writeHead(200, {'Content-Type' : 'text/html'});
     //                                                  LOAD IN CUSTOMERS FROM DATABASE HERE
-    response.write(ejs.render(loadedPages.getCustomers, {customers : loadedDB.customerData}));
+    response.write(ejs.render(loadedPages.getCustomers, {customers : customerArray}));
     response.end();
 }
 // GET request for /newcustomer, page to add a new customer to the 'database' 

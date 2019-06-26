@@ -7,20 +7,39 @@ const ObjectId = Schema.ObjectId;
 
 const CustomerSchema = new Schema({
     // id : ObjectId,
-    name : String,
-    phoneNumberOne : String
+    name: String,
+    phoneNumberOne: String
 });
 
-let Customer = mongoose.model('Customer',CustomerSchema);
+let CustomerModel = mongoose.model('Customer', CustomerSchema);
 
-var CustomerOne = new Customer({
-    name : "Juliana",
-    phoneNumberOne : "6316721260"
+var CustomerOne = new CustomerModel({
+    name: "Juliana",
+    phoneNumberOne: "6316721260"
 });
-mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.password}@ds161069.mlab.com:61069/dataclaw`, {useNewUrlParser : true}).then((
-()=>{console.log("MONGODB CONNECTION SUCCESS"),
-(error)=>{ throw error}}
-));
+
+function dbConnect() {
+    mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.password}@ds161069.mlab.com:61069/dataclaw`, {
+        useNewUrlParser: true
+    }).then((
+        () => {
+            console.log("MONGODB CONNECTION SUCCESS"),
+                (error) => {
+                    throw error
+                }
+        }
+    ));
+}
+function parseCustomersDocument(rawDocument){
+    let custArray = []
+    for(i = 0; i < rawDocument.length; i++){
+        let currentCust = rawDocument[i];
+        custArray[i] = {'name' : currentCust.name, 'phone1' : currentCust.phoneNumberOne}
+    }
+    return custArray
+}
+// dbConnect()
+
 // Saving a new customer
 // CustomerOne.save((error)=>{
 //     if (error) throw error;
@@ -37,7 +56,16 @@ mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.
 // });
 
 // Finding all in a collection 
+
 // Customer.find({}).exec((error,customers)=>{
 //     if(error) throw error;
 //     console.log(customers)
 // })
+
+
+
+module.exports = {
+    dbConnect : dbConnect,
+    Customermodel : CustomerModel,
+    parseCustomersDocument : parseCustomersDocument
+}

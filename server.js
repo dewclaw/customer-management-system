@@ -1,10 +1,16 @@
 // Imports
 let http = require('http');
 let Routes = require('./routes.js')
+let DBManager=  require('./library/dbManager.js')
+
 // Config
 let sConfig = require('./config.js')
 
+// Connect to MongoDB
+DBManager.dbConnect();
+
 let server = http.createServer((request,response)=>{
+
     console.log(`${request.connection.remoteAddress} ------> ${request.method} -------> ${request.url}`)
 
     switch (request.url) {
@@ -15,7 +21,22 @@ let server = http.createServer((request,response)=>{
             break;
         case '/showcustomers':
             {
-                Routes.getCustomers(request,response);
+                DBManager.Customermodel.find({}).exec((error,customers)=>{
+
+                    if(error) throw error;
+
+                    let custArray = DBManager.parseCustomersDocument(customers)
+                    // console.log(custArray)
+                    // for (customer of customers){
+                    //     console.log(customer)
+                    // }
+
+
+                    // let custArray = customers.map(customer => customer.name)
+                    // console.log(custArray)
+                    Routes.getCustomers(request,response,custArray);
+                });
+                
             }
             break;
         case '/newcustomer':
@@ -34,5 +55,5 @@ let server = http.createServer((request,response)=>{
     }
 });
 
-server.listen(sConfig.port,sConfig.location, ()=>{console.log(`Server is listening on ${sConfig.location}:${sConfig.port}`)})
+server.listen(sConfig.serverConfig.port,sConfig.serverConfig.location, ()=>{console.log(`Server is listening on ${sConfig.serverConfig.location}:${sConfig.serverConfig.port}`)})
 
