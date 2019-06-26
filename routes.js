@@ -39,15 +39,29 @@ function getNewCustomer(request,response){
     response.end();
 }
 // POST request for /newcustomer, 
-function postNewCustomer(request,response,timeout){
+function postNewCustomer(request,response,timeout,customerModel){
     console.log("Information Posted")
-
+    
+    
+    // Parse Body to an object
     bodyBuilder.buildBody(request,timeout).then((body)=>{
         // Post to database
-        
-    
-        response.writeHead(301,{Location: 'http://localhost:8000/showcustomers'});
-        response.end();
+        console.log(body)
+        console.log(`New Customer Being Added: \n Customer Name : ${body.customerName} \n Customer Phone : ${body.customerPhone}`);
+        // Call DB to save new customer
+        let custToAdd = new customerModel({
+            name : body.customerName,
+            phoneNumberOne : body.customerPhone
+        }).save(error =>{
+            if (error) {
+                console.log("Error Saving Customer....Redirecting");
+                response.writeHead(301, {Location:'localhost:8000/showcustomers'})
+                throw error
+            }
+            console.log("Customer Added Successfully.... Redirecting")
+            response.writeHead(301,{Location: 'http://localhost:8000/showcustomers'});
+            response.end();
+        })
     })
 }
 // Write to customerDB function

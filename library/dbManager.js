@@ -37,7 +37,9 @@ function parseCustomersDocument(rawDocument){
         custArray[i] = {'name' : currentCust.name, 'phone1' : currentCust.phoneNumberOne}
     }
     return custArray
-}
+} 
+
+
 // dbConnect()
 
 // Saving a new customer
