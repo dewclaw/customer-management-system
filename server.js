@@ -10,7 +10,7 @@ let sConfig = require('./config.js')
 DBManager.dbConnect();
 
 let server = http.createServer((request, response) => {
-
+    response.set
     console.log(`${request.connection.remoteAddress} ------> ${request.method} -------> ${request.url}`)
 
     switch (request.url) 
