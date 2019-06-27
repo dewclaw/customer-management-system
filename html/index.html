@@ -48,7 +48,8 @@
                     <tbody>
                         <tr v-for="(customer, index) in customers">
                             <td> {{ customer.name }} <br><input v-if="customer.beginEditing" v-model="customers[index].name"> </td>
-                            <td> {{ customer.phone1 }} Edit Customer <button id="editCustomerButton"v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button><br><input v-if="customer.beginEditing" v-model="customers[index].phone1"></td>
+                            <td> {{ customer.phone1 }} Edit Customer <button id="editCustomerButton"v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
+                                <br><input v-if="customer.beginEditing" v-model="customers[index].phone1"></td>
                             
                         </tr>
                     </tbody>
