@@ -38,9 +38,10 @@
                 <br>
             </div>
             <div v-if="isAuthenticated">
-                <h1>{{ downloadCustomers() }}User Authenticated By Server</h1>
+                <h3> User Authenticated By Server</h3>
+                
                 <table>
-                    <h1> Customer List</h1>
+                    <h1> Customer List - Got {{ getCount }} </h1>
                     <thead>
 
                     </thead>
@@ -73,9 +74,13 @@
                 passWord: "",
                 isAuthenticated: false,
                 picked: "LoginSelected",
-                customers: []
+                customers: [],
+                getCount : 0
             },
             methods: {
+                log: function(string) {
+                    console.log(string)
+                },
                 checkCreds: function (username, password) {
                     // console.log(`username : ${username} \n password : ${password}`)
                     let authCreds = {
@@ -96,6 +101,9 @@
                                 success: (responseData, textStatus, jqXHR) => {
                                     console.log(responseData.content.isAuth)
                                     this.isAuthenticated = responseData.content.isAuth
+                                    if(responseData.content.isAuth){
+                                        this.downloadCustomers()
+                                    }
                                 },
                                 error: (responseData, textStatus, errorThrown) => {
                                     alert('POST Failed')
@@ -124,6 +132,7 @@
                                 `Received DATA from /api/customers -------- \n ${responseData[0].name}`
                             )
                             this.customers = responseData
+                            this.getCount += 1
                         },
                         error: (error) => {
                             alert('GET failed')
