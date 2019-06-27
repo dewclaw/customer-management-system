@@ -50,7 +50,8 @@ function postNewCustomer(request,response,timeout,customerModel){
         // Call DB to save new customer
         let custToAdd = new customerModel({
             name : body.customerName,
-            phoneNumberOne : body.customerPhone
+            phoneNumberOne : body.customerPhone,
+            beginEditing : false
         }).save(error =>{
             if (error) {
                 console.log("Error Saving Customer....Redirecting");

@@ -8,7 +8,8 @@ const ObjectId = Schema.ObjectId;
 const CustomerSchema = new Schema({
     // id : ObjectId,
     name: String,
-    phoneNumberOne: String
+    phoneNumberOne: String,
+    beginEditing : Boolean
 });
 
 let CustomerModel = mongoose.model('Customer', CustomerSchema);
@@ -34,7 +35,7 @@ function parseCustomersDocument(rawDocument){
     let custArray = []
     for(i = 0; i < rawDocument.length; i++){
         let currentCust = rawDocument[i];
-        custArray[i] = {'name' : currentCust.name, 'phone1' : currentCust.phoneNumberOne}
+        custArray[i] = {'name' : currentCust.name, 'phone1' : currentCust.phoneNumberOne, 'beginEditing' : currentCust.beginEditing}
     }
     return custArray
 } 

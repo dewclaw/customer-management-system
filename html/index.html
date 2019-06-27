@@ -16,7 +16,7 @@
 
 <body>
     <div class="container">
-        <h1>Web Server Running......</h1>
+        <!-- <h1>Web Server Running......</h1> -->
     </div>
     <div class="container">
         <div class="containter" id="AuthenticatorApp">
@@ -39,16 +39,16 @@
             </div>
             <div v-if="isAuthenticated">
                 <h3> User Authenticated By Server</h3>
-                
+
                 <table>
-                    <h1> Customer List - Got {{ getCount }} </h1>
+                    <h1> Customer List </h1>
                     <thead>
 
                     </thead>
                     <tbody>
-                        <tr v-for="customer in customers">
-                            <td> {{ customer.name }} </td>
-                            <td> {{ customer.phone1 }} </td>
+                        <tr v-for="(customer, index) in customers">
+                            <td> {{ customer.name }} <br><input v-if="customer.beginEditing" v-model="customers[index].name"> </td>
+                            <td> {{ customer.phone1 }}<br><input v-if="customer.beginEditing" v-model="customers[index].phone1"> </td>
                         </tr>
                     </tbody>
                 </table>
@@ -75,10 +75,12 @@
                 isAuthenticated: false,
                 picked: "LoginSelected",
                 customers: [],
-                getCount : 0
+                getCount: 0,
+                beginEditingName : false,
+                beginEditingPhone: false,
             },
             methods: {
-                log: function(string) {
+                log: function (string) {
                     console.log(string)
                 },
                 checkCreds: function (username, password) {
@@ -101,7 +103,7 @@
                                 success: (responseData, textStatus, jqXHR) => {
                                     console.log(responseData.content.isAuth)
                                     this.isAuthenticated = responseData.content.isAuth
-                                    if(responseData.content.isAuth){
+                                    if (responseData.content.isAuth) {
                                         this.downloadCustomers()
                                     }
                                 },
