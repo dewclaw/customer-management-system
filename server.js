@@ -10,18 +10,15 @@ let sConfig = require('./config.js')
 DBManager.dbConnect();
 
 let server = http.createServer((request, response) => {
-    response.set
+
     console.log(`${request.connection.remoteAddress} ------> ${request.method} -------> ${request.url}`)
 
-    switch (request.url) 
-    {
-        case '/': 
-        {
+    switch (request.url) {
+        case '/': {
             Routes.getIndex(request, response);
         }
         break;
-    case '/showcustomers': 
-    {
+    case '/showcustomers': {
         if (request.method == 'GET') {
             DBManager.Customermodel.find({}).exec((error, customers) => {
                 if (error) throw error;
@@ -37,8 +34,7 @@ let server = http.createServer((request, response) => {
 
     }
     break;
-    case '/newcustomer': 
-    {
+    case '/newcustomer': {
         if (request.method == 'GET') {
             Routes.getNewCustomer(request, response)
         } else if (request.method == 'POST') {
@@ -48,8 +44,7 @@ let server = http.createServer((request, response) => {
         }
     }
     break
-    case '/api/customers': 
-    {
+    case '/api/customers': {
         DBManager.Customermodel.find({}).exec((error, customers) => {
             if (error) throw error;
             let custArray = DBManager.parseCustomersDocument(customers)
@@ -57,14 +52,29 @@ let server = http.createServer((request, response) => {
             response.end(JSON.stringify(custArray))
         })
     }
-        break
-    case '/api/auth':
-        {
-            if (method == 'POST') {
-                Routes.apiAuthPost(request,response)
+    break
+    case '/api/auth': 
+    {
+        // Write CORS HEADER 
+        response.writeHead(200, {
+            'Content-Type' : 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+            'Access-Control-Max-Age': 2592000, // 30 days
+            /** add other headers as per requirement */
+        })
+        if(request.method == 'POST') {
+            Routes.apiAuthPost(request, response, 10000)
+
+            
+        } else if(request.method == 'GET'){
+            resObj = {
+                content : "No Get Here"
             }
+            response.end(JSON.stringify(resObj))
         }
-        break
+    }
+    break
     default: {
         Routes.getUndefined(request, response);
     }

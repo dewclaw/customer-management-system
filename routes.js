@@ -63,10 +63,22 @@ function postNewCustomer(request,response,timeout,customerModel){
         })
     })
 }
-function apiAuthPost(request,response,timeout){
-    let message = { content : "API AUTH RESPONSE"}
-
-    response.end(JSON.stringify(message))
+function apiAuthPost(request,response,timeout, CORSheader){
+    bodyBuilder.buildBody(request, timeout).then((body)=>{
+        var isAuth = false
+        if(body.picked == 'LoginSelected'){
+            isAuth = true
+        } 
+        
+        let message = {
+            content : {
+                isAuth : isAuth
+            }
+        }
+        console.log(body)
+        response.end(JSON.stringify(message))
+    })
+    
 }
 // GET request to any route not defined
 function getUndefined(request,response){

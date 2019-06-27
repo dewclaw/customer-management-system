@@ -21,21 +21,38 @@
     <div class="container">
         <div class="containter" id="AuthenticatorApp">
             <h2> {{ message }} </h2>
+            <div v-if="!isAuthenticated">
+                <form name="Login Form" onsubmit="return false">
+                    Username:
+                    <input v-model="userName" id="usernameField" type="text" name="username" value=""
+                        placeholder="Enter Your Username">
 
-            <form name="Login Form" onsubmit="return false">
-                Username:
-                <input v-model="userName" id="usernameField" type="text" name="username" value=""
-                    placeholder="Enter Your Username">
-
+                    <br>
+                    Password: <input v-model="passWord" id="passwordField" type="password" name="password" value="">
+                    <button v-on:click="checkCreds(userName, passWord)" action="">Submit</button>
+                </form>
+                <input type="radio" id="LoginSelected" value="LoginSelected" v-model="picked">
+                <label for="LoginSelected">Login</label>
+                <input type="radio" id="RegisterSelected" value="RegisterSelected" v-model="picked">
+                <label for="RegisterSelected">Register</label>
                 <br>
-                Password: <input v-model="passWord" id="passwordField" type="password" name="password" value="">
-                <button v-on:click="checkCreds(userName, passWord)" action="">Submit</button>
-            </form>
-            <input type="radio" id="LoginSelected" value="LoginSelected" v-model="picked">
-            <label for="LoginSelected">Login</label>
-            <input type="radio" id="RegisterSelected" value="RegisterSelected" v-model="picked">
-            <label for="RegisterSelected">Register</label>
-            <br>
+            </div>
+            <div v-if="isAuthenticated">
+                <h1>{{ downloadCustomers() }}User Authenticated By Server</h1>
+                <table>
+                    <h1> Customer List</h1>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                        <tr v-for="customer in customers">
+                            <td> {{ customer.name }} </td>
+                            <td> {{ customer.phone1 }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 
@@ -55,7 +72,8 @@
                 userName: "",
                 passWord: "",
                 isAuthenticated: false,
-                picked: ""
+                picked: "LoginSelected",
+                customers: []
             },
             methods: {
                 checkCreds: function (username, password) {
@@ -63,36 +81,54 @@
                     let authCreds = {
                         username: username,
                         pw: password,
-                        picked : this.picked
+                        picked: this.picked
                     }
                     console.log(authCreds)
-                    // if(this.picked == "LoginSelected"){
-                    //     console.log("User is trying to authenticate")
-                    //     // this.picked = ""
-                    // } else if (this.picked == "RegisterSelected"){
-                    //     console.log("User is attempting to register")
-                    // } else {
-                    //     console.log("There is an error occuring")
-                    // }
+
                     switch (this.picked) {
-                        case 'LoginSelected': 
-                        {
-                            $.post("localhost:8000/api/auth", authCreds, (data)=>{
-                                console.log(data)
+                        case 'LoginSelected': {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'http://localhost:8000/api/auth',
+                                crossDomain: true,
+                                data: authCreds,
+                                dataType: 'json',
+                                success: (responseData, textStatus, jqXHR) => {
+                                    console.log(responseData.content.isAuth)
+                                    this.isAuthenticated = responseData.content.isAuth
+                                },
+                                error: (responseData, textStatus, errorThrown) => {
+                                    alert('POST Failed')
+                                }
                             })
                             console.log('Login Selected')
                         }
                         break
-                        case 'RegisterSelected': 
-                        {
-                            console.log('Register Selected')
-                        }
-                        default:
-                            {
-                                console.log("Default Case Reached")
-                            }
-                            break
+                    case 'RegisterSelected': {
+                        console.log('Register Selected')
                     }
+                    default: {
+                        console.log("Default Case Reached")
+                    }
+                    break
+                    }
+                },
+                downloadCustomers: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8000/api/customers',
+                        crossDomain: true,
+                        dataType: 'json',
+                        success: (responseData) => {
+                            console.log(
+                                `Received DATA from /api/customers -------- \n ${responseData[0].name}`
+                            )
+                            this.customers = responseData
+                        },
+                        error: (error) => {
+                            alert('GET failed')
+                        }
+                    })
                 }
             }
         })
