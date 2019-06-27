@@ -13,12 +13,15 @@ let server = http.createServer((request, response) => {
 
     console.log(`${request.connection.remoteAddress} ------> ${request.method} -------> ${request.url}`)
 
-    switch (request.url) {
-        case '/': {
+    switch (request.url) 
+    {
+        case '/': 
+        {
             Routes.getIndex(request, response);
         }
         break;
-    case '/showcustomers': {
+    case '/showcustomers': 
+    {
         if (request.method == 'GET') {
             DBManager.Customermodel.find({}).exec((error, customers) => {
                 if (error) throw error;
@@ -26,13 +29,16 @@ let server = http.createServer((request, response) => {
                 Routes.getCustomers(request, response, custArray);
             });
         } else {
-            response.writeHead(404, {'Content-Type' : 'text/html'})
+            response.writeHead(404, {
+                'Content-Type': 'text/html'
+            })
             response.end("Unauthorized Method On Route")
         }
 
     }
     break;
-    case '/newcustomer':
+    case '/newcustomer': 
+    {
         if (request.method == 'GET') {
             Routes.getNewCustomer(request, response)
         } else if (request.method == 'POST') {
@@ -40,6 +46,17 @@ let server = http.createServer((request, response) => {
             let custModel = DBManager.Customermodel;
             Routes.postNewCustomer(request, response, 10000, custModel)
         }
+    }
+    break
+    case '/api/customers': 
+    {
+        DBManager.Customermodel.find({}).exec((error, customers) => {
+            if (error) throw error;
+            let custArray = DBManager.parseCustomersDocument(customers)
+            // Routes.getCustomers(request, response, custArray);
+            response.end(JSON.stringify(custArray))
+        })
+    }
         break
     default: {
         Routes.getUndefined(request, response);

@@ -77,6 +77,10 @@ function addNewCustomer(requestBody){
     console.log(newCustObj.name)
 }
 
+function apiShowCustomers(request,response){
+    
+}
+
 // GET request to any route not defined
 function getUndefined(request,response){
     response.writeHead(404, {'Content-Type' : 'text/html'})

@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Customer List</title>
 </head>
+
 <body>
-    <h1>Customer List</h1>
-    <table>
+    <!-- <h1>Customer List</h1> -->
+    <!-- <table>
         <thead>
             <tr>
                 <th colspan="2">Customer List</th>
@@ -23,6 +28,50 @@
             <% }); %>
 
         </tbody>
-    </table>
+    </table> -->
+    <div id="DisplayCustomersApp">
+        <table>
+            <h1> {{ title }}</h1>
+            <thead>
+                <tr>
+
+                    {{message}}
+
+                </tr>
+            <tbody>
+                <tr v-for="customer in Customers">
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone1}}</td>
+                </tr>
+            </tbody>
+            </thead>
+            <button v-on:click="DownloadCustomers">Update!</button>
+        </table>
+
+        </ol> 
+    </div>
+
+    <script>
+        var DisplayCustomersApp = new Vue({
+            el: "#DisplayCustomersApp",
+            data: {
+                message: "This should display all the customers in the database",
+                Customers: [],
+                title: "Customer List"
+            },
+            methods: {
+                DownloadCustomers: function () {
+                    $.get('http://localhost:8000/api/customers', (data) => {
+                        // console.log(`This was ran from VueJS ${JSON.parse(data)[0].name}`);
+                        let parsedJSON = JSON.parse(data);
+                        this.Customers = parsedJSON;
+                    })
+                }
+            }
+        })
+        DisplayCustomersApp.DownloadCustomers()
+        // console.log(DisplayCustomersApp.DownloadCustomers())
+    </script>
 </body>
+
 </html>
