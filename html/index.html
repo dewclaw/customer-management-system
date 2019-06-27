@@ -40,19 +40,32 @@
             <div v-if="isAuthenticated">
                 <h3> User Authenticated By Server</h3>
 
-                <table>
+                <table class='table table-hover'>
                     <h1> Customer List </h1>
                     <thead>
-
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
+                        </th>
                         <tr v-for="(customer, index) in customers">
-                            <td> {{ customer.name }} <br><input v-if="customer.beginEditing" v-model="customers[index].name"> </td>
-                            <td> {{ customer.phone1 }} <button id="editCustomerButton"v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
-                                <button v-if="customer.beginEditing" v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button><br><input v-if="customer.beginEditing" v-model="customers[index].phone1"></td>
-                            
+
+                            <td> {{ customer.name }} <br><input v-if="customer.beginEditing"
+                                    v-model="customers[index].name"> </td>
+                            <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
+                                    v-model="customers[index].phone1"></td>
+                            <td><button id="editCustomerButton"
+                                    v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
+                                <button v-if="customer.beginEditing"
+                                    v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button><br>
+                            </td>
                         </tr>
+                        </th>
                     </tbody>
+
                 </table>
 
             </div>
@@ -78,14 +91,14 @@
                 picked: "LoginSelected",
                 customers: [],
                 getCount: 0,
-                beginEditingName : false,
+                beginEditingName: false,
                 beginEditingPhone: false,
             },
             methods: {
-                sendAlert: function(string){
+                sendAlert: function (string) {
                     alert(string)
-                }
-                ,log: function (string) {
+                },
+                log: function (string) {
                     console.log(string)
                 },
                 checkCreds: function (username, password) {

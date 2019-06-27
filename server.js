@@ -2,7 +2,7 @@
 let http = require('http');
 let Routes = require('./routes.js')
 let DBManager = require('./library/dbManager.js')
-
+let fs = require('fs')
 // Config
 let sConfig = require('./config.js')
 
@@ -31,7 +31,6 @@ let server = http.createServer((request, response) => {
             })
             response.end("Unauthorized Method On Route")
         }
-
     }
     break;
     case '/newcustomer': {
