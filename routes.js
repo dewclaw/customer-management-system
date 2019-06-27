@@ -41,8 +41,7 @@ function getNewCustomer(request,response){
 // POST request for /newcustomer, 
 function postNewCustomer(request,response,timeout,customerModel){
     console.log("Information Posted")
-    
-    
+
     // Parse Body to an object
     bodyBuilder.buildBody(request,timeout).then((body)=>{
         // Post to database
@@ -64,23 +63,11 @@ function postNewCustomer(request,response,timeout,customerModel){
         })
     })
 }
-// Write to customerDB function
-function addNewCustomer(requestBody){
-    let newCustObj = {
-        "name" : requestBody.customerName,
-        "phone1" : requestBody.customerPhone
-    }
-    // fs.appendFile('./jsonDB/customerDB.json', JSON.stringify(newCustObj), (error)=>{
-    //     if (error) throw error;
-    //     console.log(`file write success.`)
-    // })
-    console.log(newCustObj.name)
-}
+function apiAuthPost(request,response,timeout){
+    let message = { content : "API AUTH RESPONSE"}
 
-function apiShowCustomers(request,response){
-    
+    response.end(JSON.stringify(message))
 }
-
 // GET request to any route not defined
 function getUndefined(request,response){
     response.writeHead(404, {'Content-Type' : 'text/html'})
@@ -92,5 +79,25 @@ module.exports = {
     getUndefined : getUndefined,
     getCustomers : getCustomers,
     getNewCustomer : getNewCustomer,
-    postNewCustomer : postNewCustomer
+    postNewCustomer : postNewCustomer,
+    apiAuthPost: apiAuthPost
 }
+
+
+
+// Write to customerDB function
+// function addNewCustomer(requestBody){
+//     let newCustObj = {
+//         "name" : requestBody.customerName,
+//         "phone1" : requestBody.customerPhone
+//     }
+//     // fs.appendFile('./jsonDB/customerDB.json', JSON.stringify(newCustObj), (error)=>{
+//     //     if (error) throw error;
+//     //     console.log(`file write success.`)
+//     // })
+//     console.log(newCustObj.name)
+// }
+
+// function apiShowCustomers(request,response){
+    
+// }

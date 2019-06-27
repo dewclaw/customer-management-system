@@ -1,12 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Document</title>
 </head>
+
 <body>
-    <h1>Web Server Running......</h1>
+    <div class="container">
+        <h1>Web Server Running......</h1>
+    </div>
+    <div class="container">
+        <div class="containter" id="AuthenticatorApp">
+            <h2> {{ message }} </h2>
+
+            <form name="Login Form" onsubmit="return false">
+                Username:
+                <input v-model="userName" id="usernameField" type="text" name="username" value=""
+                    placeholder="Enter Your Username">
+
+                <br>
+                Password: <input v-model="passWord" id="passwordField" type="password" name="password" value="">
+                <button v-on:click="checkCreds(userName, passWord)" action="">Submit</button>
+            </form>
+            <input type="radio" id="LoginSelected" value="LoginSelected" v-model="picked">
+            <label for="LoginSelected">Login</label>
+            <input type="radio" id="RegisterSelected" value="RegisterSelected" v-model="picked">
+            <label for="RegisterSelected">Register</label>
+            <br>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script>
+        // VueJS Apps Here
+
+        var AuthenticatorApp = new Vue({
+            el: "#AuthenticatorApp",
+            data: {
+                message: "VueJS Authentication Application",
+                userName: "",
+                passWord: "",
+                isAuthenticated: false,
+                picked: ""
+            },
+            methods: {
+                checkCreds: function (username, password) {
+                    // console.log(`username : ${username} \n password : ${password}`)
+                    let authCreds = {
+                        username: username,
+                        pw: password,
+                        picked : this.picked
+                    }
+                    console.log(authCreds)
+                    // if(this.picked == "LoginSelected"){
+                    //     console.log("User is trying to authenticate")
+                    //     // this.picked = ""
+                    // } else if (this.picked == "RegisterSelected"){
+                    //     console.log("User is attempting to register")
+                    // } else {
+                    //     console.log("There is an error occuring")
+                    // }
+                    switch (this.picked) {
+                        case 'LoginSelected': 
+                        {
+                            $.post("localhost:8000/api/auth", authCreds, (data)=>{
+                                console.log(data)
+                            })
+                            console.log('Login Selected')
+                        }
+                        break
+                        case 'RegisterSelected': 
+                        {
+                            console.log('Register Selected')
+                        }
+                        default:
+                            {
+                                console.log("Default Case Reached")
+                            }
+                            break
+                    }
+                }
+            }
+        })
+    </script>
 </body>
+
 </html>

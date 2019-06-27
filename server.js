@@ -58,6 +58,13 @@ let server = http.createServer((request, response) => {
         })
     }
         break
+    case '/api/auth':
+        {
+            if (method == 'POST') {
+                Routes.apiAuthPost(request,response)
+            }
+        }
+        break
     default: {
         Routes.getUndefined(request, response);
     }
