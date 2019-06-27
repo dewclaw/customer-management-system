@@ -49,7 +49,7 @@
                         <tr v-for="(customer, index) in customers">
                             <td> {{ customer.name }} <br><input v-if="customer.beginEditing" v-model="customers[index].name"> </td>
                             <td> {{ customer.phone1 }} <button id="editCustomerButton"v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
-                                <button v-if="customer.beginEditing" v-on:click="sendAlert('Save Changes')">Save</button><br><input v-if="customer.beginEditing" v-model="customers[index].phone1"></td>
+                                <button v-if="customer.beginEditing" v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button><br><input v-if="customer.beginEditing" v-model="customers[index].phone1"></td>
                             
                         </tr>
                     </tbody>

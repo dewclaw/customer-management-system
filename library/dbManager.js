@@ -14,10 +14,10 @@ const CustomerSchema = new Schema({
 
 let CustomerModel = mongoose.model('Customer', CustomerSchema);
 
-var CustomerOne = new CustomerModel({
-    name: "Juliana",
-    phoneNumberOne: "6316721260"
-});
+// var CustomerOne = new CustomerModel({
+//     name: "Juliana",
+//     phoneNumberOne: "6316721260"
+// });
 
 function dbConnect() {
     mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.password}@ds161069.mlab.com:61069/dataclaw`, {
