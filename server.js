@@ -63,9 +63,7 @@ let server = http.createServer((request, response) => {
             /** add other headers as per requirement */
         })
         if(request.method == 'POST') {
-            Routes.apiAuthPost(request, response, 10000)
-
-            
+            Routes.apiAuthPost(request, response, 10000,DBManager.UserAccountModel)
         } else if(request.method == 'GET'){
             resObj = {
                 content : "No Get Here"

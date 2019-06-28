@@ -15,63 +15,85 @@
 </head>
 
 <body>
+    <!-- <div class="container"> -->
     <div class="container">
-        <!-- <h1>Web Server Running......</h1> -->
-    </div>
-    <div class="container">
-        <div class="containter" id="AuthenticatorApp">
-            <h2> {{ message }} </h2>
-            <div v-if="!isAuthenticated">
-                <form name="Login Form" onsubmit="return false">
-                    Username:
-                    <input v-model="userName" id="usernameField" type="text" name="username" value=""
-                        placeholder="Enter Your Username">
 
-                    <br>
-                    Password: <input v-model="passWord" id="passwordField" type="password" name="password" value="">
-                    <button v-on:click="checkCreds(userName, passWord)" action="">Submit</button>
-                </form>
-                <input type="radio" id="LoginSelected" value="LoginSelected" v-model="picked">
-                <label for="LoginSelected">Login</label>
-                <input type="radio" id="RegisterSelected" value="RegisterSelected" v-model="picked">
-                <label for="RegisterSelected">Register</label>
-                <br>
+        <div class="row justify-content-center">
+            <div class="col" id="AuthenticatorApp">
+                <h2 class="text-center"> {{ message }} </h2>
+                <div v-if="!isAuthenticated">
+                    <div class="container border">
+                        <div class="row justify-content-center">
+                            <form name="Login Form" onsubmit="return false">
+                                Username:
+                                <input v-model="userName" id="usernameField" type="text" name="username" value=""
+                                    placeholder="Enter Your Username">
+
+                                <br>
+                                Password: <input v-model="passWord" id="passwordField" type="password" name="password"
+                                    value="">
+                                <button v-on:click="checkCreds(userName, passWord)" action="">Submit</button>
+
+                            </form>
+                            <div class=" container row justify-content-center">
+
+
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" id="LoginSelected" value="LoginSelected" v-model="picked">
+                                        <label for="LoginSelected">Login</label>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" id="RegisterSelected" value="RegisterSelected"
+                                            v-model="picked">
+                                        <label for="RegisterSelected">Register</label>
+                                    </label>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="isAuthenticated">
+                    <h3> User Authenticated By Server</h3>
+
+                    <table class='table table-hover border'>
+                        <caption> List of current users in Database</caption>
+                        <h1> Customer List </h1>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </th>
+                            <tr v-for="(customer, index) in customers">
+
+                                <td> {{ customer.name }} <br><input v-if="customer.beginEditing"
+                                        v-model="customers[index].name" v-on:keyup.enter="customer.beginEditing=false">
+                                </td>
+                                <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
+                                        v-model="customers[index].phone1"
+                                        v-on:keyup.enter="customer.beginEditing=false">
+                                </td>
+                                <td><button id="editCustomerButton"
+                                        v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
+                                    <button v-if="customer.beginEditing"
+                                        v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button><br>
+                                </td>
+                            </tr>
+                            </th>
+                        </tbody>
+
+                    </table>
+
+                </div>
             </div>
-            <div v-if="isAuthenticated">
-                <h3> User Authenticated By Server</h3>
-
-                <table class='table table-hover'>
-                    <h1> Customer List </h1>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Phone Number</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </th>
-                        <tr v-for="(customer, index) in customers">
-
-                            <td> {{ customer.name }} <br><input v-if="customer.beginEditing"
-                                    v-model="customers[index].name"> </td>
-                            <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
-                                    v-model="customers[index].phone1"></td>
-                            <td><button id="editCustomerButton"
-                                    v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
-                                <button v-if="customer.beginEditing"
-                                    v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button><br>
-                            </td>
-                        </tr>
-                        </th>
-                    </tbody>
-
-                </table>
-
-            </div>
+            <!-- </div> -->
         </div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
@@ -119,7 +141,7 @@
                                 data: authCreds,
                                 dataType: 'json',
                                 success: (responseData, textStatus, jqXHR) => {
-                                    console.log(responseData.content.isAuth)
+                                    console.log(`isAuth Response : ${responseData.content.isAuth}`)
                                     this.isAuthenticated = responseData.content.isAuth
                                     if (responseData.content.isAuth) {
                                         this.downloadCustomers()
@@ -162,6 +184,7 @@
             }
         })
     </script>
+
 </body>
 
 </html>

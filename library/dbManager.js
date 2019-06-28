@@ -11,13 +11,14 @@ const CustomerSchema = new Schema({
     phoneNumberOne: String,
     beginEditing : Boolean
 });
+const UserAccountSchema = new Schema({
+    emailAddress : String,
+    password : String
+})
 
 let CustomerModel = mongoose.model('Customer', CustomerSchema);
+let UserAccountModel = mongoose.model('UserAccount',UserAccountSchema);
 
-// var CustomerOne = new CustomerModel({
-//     name: "Juliana",
-//     phoneNumberOne: "6316721260"
-// });
 
 function dbConnect() {
     mongoose.connect(`mongodb://${sConfig.mongoCreds.username}:${sConfig.mongoCreds.password}@ds161069.mlab.com:61069/dataclaw`, {
@@ -31,6 +32,7 @@ function dbConnect() {
         }
     ));
 }
+
 function parseCustomersDocument(rawDocument){
     let custArray = []
     for(i = 0; i < rawDocument.length; i++){
@@ -70,5 +72,6 @@ function parseCustomersDocument(rawDocument){
 module.exports = {
     dbConnect : dbConnect,
     Customermodel : CustomerModel,
+    UserAccountModel : UserAccountModel,
     parseCustomersDocument : parseCustomersDocument
 }
