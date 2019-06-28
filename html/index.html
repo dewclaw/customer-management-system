@@ -66,7 +66,8 @@
                                 <th scope="col">Phone Number</th>
                                 <th scope="col">Actions </th>
                                 <!-- <th scope="col"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCustomerModal">+ Add Customer</button></th> -->
-                                <th scope="col"><button v-on:click="addNewCustClicked()" class="btn btn-primary btn-sm"> + Add
+                                <th scope="col"><button v-on:click="addNewCustClicked()" class="btn btn-primary btn-sm">
+                                        + Add
                                         Customer</button></th>
 
                             </tr>
@@ -80,12 +81,13 @@
                                 </td>
                                 <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
                                         v-model="customers[index].phone1"
-                                        v-on:keyup.enter="customer.beginEditing=false">
+                                        v-on:keyup.enter="saveCust(index)">
                                 </td>
                                 <td><button id="editCustomerButton"
                                         v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
-                                    <button v-if="customer.beginEditing" v-on:click="customer.beginEditing = false;sendAlert('Save Changes')">Save</button>
-                                    <button v-if="customer.beginEditing" v-on:click="removeFromTable(index)"> DELETE </button>
+                                    <button v-if="customer.beginEditing" v-on:click="saveCust(index)">Save</button>
+                                    <button v-if="customer.beginEditing" v-on:click="removeFromTable(index)"> DELETE
+                                    </button>
                                 </td>
                             </tr>
                             </th>
@@ -208,7 +210,7 @@
                         dataType: 'json',
                         success: (responseData) => {
                             console.log(
-                                `Received DATA from /api/customers -------- \n ${responseData[0].name}`
+                                `Received DATA from /api/customers -------- \n First Customer Name -> ${responseData[0].name}`
                             )
                             this.customers = responseData
                             this.getCount += 1
@@ -218,16 +220,39 @@
                         }
                     })
                 },
-                addNewCustClicked: function() {
+                addNewCustClicked: function () {
                     this.customers.push({
-                        name: "Edit New Customer",
-                        phone1: "Edit New Customer",
-                        beginEditing: true
+                        name: "Full Name",
+                        phone1: "Phone Number",
+                        beginEditing: true,
+                        isNew: true
                     })
                 },
-                removeFromTable: function (index){
+                removeFromTable: function (index) {
                     this.customers.splice(index, 1)
                     console.log("DELETE CUSTOMER FROM DATABASE")
+                },
+                saveCust: function (index) {
+                    this.customers[index].beginEditing = false
+
+                    // Update Customer Information in DB
+                    console.log(`Customer _id is: ${this.customers[index]._id}`)
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8000/api/customers',
+                        data: this.customers[index],
+                        success: (responseData, textStatus, jqXHR) => {
+                            console.log(`POST SUCCESS RESPONE DATA : ${responseData}`)
+                            if(this.customers[index].isNew == true){
+                                this.customers[index].isNew = false
+                            }
+                            // this.downloadCustomers();
+                        },
+                        error: (error) => {
+                            console.log(error)
+                        }
+                    })
+
                 }
             }
         })

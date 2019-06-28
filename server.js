@@ -44,29 +44,36 @@ let server = http.createServer((request, response) => {
     }
     break
     case '/api/customers': {
-        DBManager.Customermodel.find({}).exec((error, customers) => {
-            if (error) throw error;
-            let custArray = DBManager.parseCustomersDocument(customers)
-            // Routes.getCustomers(request, response, custArray);
-            response.end(JSON.stringify(custArray))
-        })
-    }
-    break
-    case '/api/auth': 
-    {
-        // Write CORS HEADER 
         response.writeHead(200, {
-            'Content-Type' : 'application/json',
+            'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
             'Access-Control-Max-Age': 2592000, // 30 days
             /** add other headers as per requirement */
         })
-        if(request.method == 'POST') {
-            Routes.apiAuthPost(request, response, 10000,DBManager.UserAccountModel)
-        } else if(request.method == 'GET'){
+        if (request.method == 'GET') {
+            Routes.apiCustomersGet(request,response,DBManager)
+        } else if(request.method == 'POST'){
+            Routes.apiCustomersPost(request,response,DBManager)
+        }
+
+    }
+    break
+
+    case '/api/auth': {
+        // Write CORS HEADER 
+        response.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+            'Access-Control-Max-Age': 2592000, // 30 days
+            /** add other headers as per requirement */
+        })
+        if (request.method == 'POST') {
+            Routes.apiAuthPost(request, response, 10000, DBManager.UserAccountModel)
+        } else if (request.method == 'GET') {
             resObj = {
-                content : "No Get Here"
+                content: "No Get Here"
             }
             response.end(JSON.stringify(resObj))
         }

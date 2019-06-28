@@ -112,7 +112,31 @@ function apiAuthPost(request, response, timeout, UserAccountModel) {
             })
         }
     })
+}
 
+function apiCustomersGet(request,response,DBManager){
+
+    DBManager.getAllCustomers().then((customers)=>{
+        let custArray = DBManager.parseCustomersDocument(customers)
+        // Routes.getCustomers(request, response, custArray);
+        response.end(JSON.stringify(custArray))
+    })
+
+}
+function apiCustomersPost(request,response,DBManager){
+    bodyBuilder.buildBody(request,70000).then((body)=>{
+        console.log('apiCustomersPost : Body Parsed')
+        console.log(body)
+
+        if(body.isNew == undefined || body.isNew == false){
+            console.log("Update Existing Customer")
+            DBManager.updateCustomer(body)
+        } else {
+            console.log("Add New Customer")
+        }
+
+        response.end(JSON.stringify({message : "received"}))
+    })
 }
 // GET request to any route not defined
 function getUndefined(request, response) {
@@ -128,7 +152,9 @@ module.exports = {
     getCustomers: getCustomers,
     getNewCustomer: getNewCustomer,
     postNewCustomer: postNewCustomer,
-    apiAuthPost: apiAuthPost
+    apiAuthPost: apiAuthPost,
+    apiCustomersGet : apiCustomersGet,
+    apiCustomersPost: apiCustomersPost
 }
 
 
