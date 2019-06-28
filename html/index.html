@@ -77,7 +77,7 @@
                             <tr v-for="(customer, index) in customers">
 
                                 <td> {{ customer.name }} <br><input v-if="customer.beginEditing"
-                                        v-model="customers[index].name" v-on:keyup.enter="customer.beginEditing=false">
+                                        v-model="customers[index].name" v-on:keyup.enter="saveCust(index)">
                                 </td>
                                 <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
                                         v-model="customers[index].phone1"
