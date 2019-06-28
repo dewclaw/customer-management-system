@@ -129,15 +129,21 @@ function apiCustomersPost(request,response,DBManager){
         console.log(body)
 
         if(body.isNew == undefined || body.isNew == false){
+            // Customer Currently Exists in DB
             console.log("Update Existing Customer")
             DBManager.updateCustomer(body)
+            // More Detailed Response Here
         } else {
+            // Customer Does Not Currently Exist in DB
             console.log("Add New Customer")
+            DBManager.addNewCustomer(body)
         }
 
         response.end(JSON.stringify({message : "received"}))
     })
 }
+
+
 // GET request to any route not defined
 function getUndefined(request, response) {
     response.writeHead(404, {

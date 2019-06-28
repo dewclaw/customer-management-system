@@ -80,13 +80,12 @@
                                         v-model="customers[index].name" v-on:keyup.enter="saveCust(index)">
                                 </td>
                                 <td> {{ customer.phone1 }} <br> <input v-if="customer.beginEditing"
-                                        v-model="customers[index].phone1"
-                                        v-on:keyup.enter="saveCust(index)">
+                                        v-model="customers[index].phone1" v-on:keyup.enter="saveCust(index)">
                                 </td>
                                 <td><button id="editCustomerButton"
                                         v-on:click="customer.beginEditing = !customer.beginEditing">Edit</button>
                                     <button v-if="customer.beginEditing" v-on:click="saveCust(index)">Save</button>
-                                    <button v-if="customer.beginEditing" v-on:click="removeFromTable(index)"> DELETE
+                                    <button v-if="customer.beginEditing" v-on:click="deleteCustomer(index)"> DELETE
                                     </button>
                                 </td>
                             </tr>
@@ -230,7 +229,7 @@
                 },
                 removeFromTable: function (index) {
                     this.customers.splice(index, 1)
-                    console.log("DELETE CUSTOMER FROM DATABASE")
+                    // console.log("DELETE CUSTOMER FROM DATABASE")
                 },
                 saveCust: function (index) {
                     this.customers[index].beginEditing = false
@@ -242,8 +241,8 @@
                         url: 'http://localhost:8000/api/customers',
                         data: this.customers[index],
                         success: (responseData, textStatus, jqXHR) => {
-                            console.log(`POST SUCCESS RESPONE DATA : ${responseData}`)
-                            if(this.customers[index].isNew == true){
+                            console.log(`POST SUCCESS RESPONSE DATA : ${responseData}`)
+                            if (this.customers[index].isNew == true) {
                                 this.customers[index].isNew = false
                             }
                             // this.downloadCustomers();
@@ -253,6 +252,28 @@
                         }
                     })
 
+                },
+                deleteCustomer: function (index) {
+                    let cust = this.customers[index]
+                    // If this customer has an ID then it has been registered in the database
+                    if (cust._id) {
+                        console.log(`sending request to db`)
+                        $.ajax({
+                            type: 'DELETE',
+                            url: 'http://localhost:8000/api/customers',
+                            data: '${cust._id}',
+                            success: (data,textStatus,jqXHR)=>{
+                                console.log(`Client has successfully performed AJAX DELETE request... \n ${textStatus}, ${data}`)
+                            },
+                            error: (error) => {
+                                console.log(`Error Deleting the customer on the client side...... \n ${error}`)
+                            }
+                        })
+                    } else {
+                        // This Customer Has Not Been Posted To The DB Yet
+                        console.log(`locally removing from table`)
+                        this.removeFromTable(index)
+                    }
                 }
             }
         })

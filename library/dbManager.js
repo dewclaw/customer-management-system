@@ -80,10 +80,50 @@ function getAllCustomers() {
     })
 }
 
-function addNewCustomer() {
-
+function addNewCustomer(body) {
+    return new Promise((resolve, reject) => {
+        try {
+            let newCust = new CustomerModel({
+                name: body.name,
+                phoneNumberOne: body.phone1,
+                beginEditing: false
+            })
+            resolve(newCust.save())
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
+/*
+                Code Test Area
+*/
 // dbConnect()
+
+/* 
+                End Code Test Area
+*/
+module.exports = {
+    dbConnect: dbConnect,
+    Customermodel: CustomerModel,
+    UserAccountModel: UserAccountModel,
+    parseCustomersDocument: parseCustomersDocument,
+    getAllCustomers: getAllCustomers,
+    updateCustomer: updateCustomer,
+    addNewCustomer: addNewCustomer
+}
+
+
+
+
+
+
+// addNewCustomer({
+//     name: 'Test User',
+//     phone1: '1-123-321-2231',
+//     beginEditing: false
+// }).then(x =>{
+//     console.log(`Add Customer Promise has resolve with : ${x}`)
+// })
 // getAllCustomers().then((customers) => {
 //     console.log(customers)
 // })
@@ -133,13 +173,3 @@ function addNewCustomer() {
 //     console.log(customers)
 // })
 
-
-
-module.exports = {
-    dbConnect: dbConnect,
-    Customermodel: CustomerModel,
-    UserAccountModel: UserAccountModel,
-    parseCustomersDocument: parseCustomersDocument,
-    getAllCustomers : getAllCustomers,
-    updateCustomer : updateCustomer
-}
