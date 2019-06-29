@@ -56,12 +56,8 @@ let server = http.createServer((request, response) => {
         } else if(request.method == 'POST'){
             Routes.apiCustomersPost(request,response,DBManager)
         } else if(request.method == 'DELETE'){
-            console.log("DELETE REQUEST RECEIVED...")
-            response.end(JSON.stringify({
-                message: 'DELETE REQUEST RECEIVED'
-            }))
+            Routes.apiCustomersDelete(request,response,DBManager)
         }
-
     }
     break
 

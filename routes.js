@@ -95,11 +95,11 @@ function apiAuthPost(request, response, timeout, UserAccountModel) {
             }).exec((error, UserObj) => {
                 if (error) {
                     console.log(`error finding match ${error}`)
-                } else if (UserObj.length < 1){
+                } else if (UserObj.length < 1) {
                     console.log("Email Does Not Exist")
                     isAuth = false
                     response.end(JSON.stringify(message))
-                } else if(tempAcc.emailAddress == UserObj[0].emailAddress && tempAcc.password == UserObj[0].password){
+                } else if (tempAcc.emailAddress == UserObj[0].emailAddress && tempAcc.password == UserObj[0].password) {
                     console.log("User Has Been Authenticated")
                     message.content.isAuth = true
                     console.log(message)
@@ -114,21 +114,23 @@ function apiAuthPost(request, response, timeout, UserAccountModel) {
     })
 }
 
-function apiCustomersGet(request,response,DBManager){
+function apiCustomersGet(request, response, DBManager) {
 
-    DBManager.getAllCustomers().then((customers)=>{
+    DBManager.getAllCustomers().then((customers) => {
         let custArray = DBManager.parseCustomersDocument(customers)
         // Routes.getCustomers(request, response, custArray);
         response.end(JSON.stringify(custArray))
     })
 
 }
-function apiCustomersPost(request,response,DBManager){
-    bodyBuilder.buildBody(request,70000).then((body)=>{
+// Either Adds or Updates the customer depending on whether the 
+// requesting coming in has been 'tagged' with the isNew attribute
+function apiCustomersPost(request, response, DBManager) {
+    bodyBuilder.buildBody(request, 70000).then((body) => {
         console.log('apiCustomersPost : Body Parsed')
         console.log(body)
 
-        if(body.isNew == undefined || body.isNew == false){
+        if (body.isNew == undefined || body.isNew == false) {
             // Customer Currently Exists in DB
             console.log("Update Existing Customer")
             DBManager.updateCustomer(body)
@@ -139,7 +141,32 @@ function apiCustomersPost(request,response,DBManager){
             DBManager.addNewCustomer(body)
         }
 
-        response.end(JSON.stringify({message : "received"}))
+        response.end(JSON.stringify({
+            message: "received"
+        }))
+    })
+}
+// Finds the _id and deletes it from the database
+
+function apiCustomersDelete(request, response, DBManager) {
+    console.log("DELETE REQUEST RECEIVED...")
+    bodyBuilder.buildBody(request, 70000).then((body) => {
+        let id = body._id._id
+        console.log(`DELETE REQUEST BODY PARSED \n _id: ${id}`)
+
+        // CALL DELETE FUNCTION 
+        // DBManager.deleteCustomer(body._id).exec((error,document)=>{
+        //     if(error){
+        //         throw error
+        //     }
+        //     console.log(`DELETED ${document}`)
+        // })
+        DBManager.CustomerModel.findByIdAndDelete(body._id, (error, document) => {
+            if (error) {
+                throw error
+            }
+            console.log(`Success ${document}`)
+        })
     })
 }
 
@@ -159,8 +186,9 @@ module.exports = {
     getNewCustomer: getNewCustomer,
     postNewCustomer: postNewCustomer,
     apiAuthPost: apiAuthPost,
-    apiCustomersGet : apiCustomersGet,
-    apiCustomersPost: apiCustomersPost
+    apiCustomersGet: apiCustomersGet,
+    apiCustomersPost: apiCustomersPost,
+    apiCustomersDelete: apiCustomersDelete
 }
 
 

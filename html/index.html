@@ -258,10 +258,11 @@
                     // If this customer has an ID then it has been registered in the database
                     if (cust._id) {
                         console.log(`sending request to db`)
+                        console.log(cust._id)
                         $.ajax({
                             type: 'DELETE',
                             url: 'http://localhost:8000/api/customers',
-                            data: '${cust._id}',
+                            data: {_id: cust._id},
                             success: (data,textStatus,jqXHR)=>{
                                 console.log(`Client has successfully performed AJAX DELETE request... \n ${textStatus}, ${data}`)
                             },

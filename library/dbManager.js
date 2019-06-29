@@ -94,11 +94,26 @@ function addNewCustomer(body) {
         }
     })
 }
+
+function deleteCustomer(id){
+    return new Promise((resolve, reject)=>{
+        try {
+            resolve(this.CustomerModel.findByIdAndDelete(id))
+        } catch(error) {
+            throw error
+        }
+    })
+}
 /*
                 Code Test Area
 */
 // dbConnect()
-
+// CustomerModel.findByIdAndDelete("5d1512736718574380ff26f3", (error,document)=>{
+//     if(error){
+//         throw error
+//     }
+//     console.log(`Success ${document}`)
+// })
 /* 
                 End Code Test Area
 */
@@ -109,7 +124,8 @@ module.exports = {
     parseCustomersDocument: parseCustomersDocument,
     getAllCustomers: getAllCustomers,
     updateCustomer: updateCustomer,
-    addNewCustomer: addNewCustomer
+    addNewCustomer: addNewCustomer,
+    deleteCustomer : deleteCustomer
 }
 
 
